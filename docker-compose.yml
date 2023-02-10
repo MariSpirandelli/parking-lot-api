@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  # api
+  local:
+    build: .
+    working_dir: /usr/src/app/
+    volumes:
+      - ./:/usr/src/app
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; yarn dev'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/status']
+      interval: 600s
+      timeout: 10s
+      retries: 5
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/parking-lot-dev?schema=public
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+
+  # database
+  db:
+    image: postgres:12.6
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    command: postgres -D /run/pgsql-12.6-data -F -c logging_collector=on
+    volumes:
+      - ./data/dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: parking-lot-dev
+      PGDATA: /run/pgsql-12.6-data
+      LOGGING_COLLECTOR: 'on'
