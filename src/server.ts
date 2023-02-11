@@ -1,6 +1,7 @@
-import createServer from './express/index';
+import createServer from './infrastructure/express/index';
 import bunyan from 'bunyan';
-import config from './config';
+import config from './infrastructure/config';
+import objection from './infrastructure/objection';
 
 const logger = bunyan.createLogger({ name: 'server' });
 
@@ -17,9 +18,7 @@ process.on('unhandledRejection', (err: any, promise) =>
 
 const exitSignalHandler = (arg) => {
   logger.info('Exit code received', arg);
-  server.close(() => {
-    logger.error('HTTP server closed');
-  });
+  objection.disconnect();
 };
 process.on('SIGINT', exitSignalHandler);
 process.on('SIGUSR1', exitSignalHandler);
@@ -27,8 +26,10 @@ process.on('SIGUSR2', exitSignalHandler);
 
 logger.info('[STARTING] Server process at UTC:', new Date());
 
-const app = createServer();
+objection.connect(config.knex.seeds.run).then(() => {
+  const app = createServer();
 
-const server = app.listen(config.port, () => {
-  logger.info(`Server running on http://localhost:${config.port}/`);
+  app.listen(config.port, () => {
+    logger.info(`Server running on http://localhost:${config.port}/`);
+  });
 });
