@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import errorHandler from './middlewares/errorHandler';
 
 const createServer = () => {
   const app = express();
@@ -20,6 +21,8 @@ const createServer = () => {
   app.get('/status', (_, res) => {
     res.status(200).json({ status: 'up' });
   });
+
+  app.use(errorHandler);
 
   return app;
 };
