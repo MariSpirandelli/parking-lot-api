@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --no-notify src/server.ts | bunyan",
     "start": "ts-node src/server.ts | bunyan",
+    "seed": "knex seed:run --knexfile ./src/infrastructure/config/knexfile.ts",
     "test": "jest"
   },
   "repository": {

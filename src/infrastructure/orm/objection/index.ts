@@ -7,18 +7,11 @@ import config from '../../config';
 
 export const dbLogger = bunyan.createLogger({ name: 'db' });
 
-const MIGRATION_PATH = '/../objection/migrations';
-const SEEDS_PATH = '/../objection/seeds';
-
 export default class ObjectionORM implements ORM {
   knexConnection: any;
 
   constructor() {
-    const knexConfig = config.knex as any;
-    knexConfig.migrations.directory = `${__dirname}${MIGRATION_PATH}`;
-    knexConfig.seeds.directory = `${__dirname}${SEEDS_PATH}`;
-
-    this.knexConnection = Knex(knexConfig);
+    this.knexConnection = Knex(config.knex);
   }
 
   async connect(runSeed: boolean = false) {
