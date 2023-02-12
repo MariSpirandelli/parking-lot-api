@@ -14,7 +14,7 @@ services:
       timeout: 10s
       retries: 5
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/parking-lot-dev?schema=public
+      - DATABASE_URL=${DATABASE_URL}
     ports:
       - 3000:3000
     depends_on:
@@ -36,8 +36,8 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: parking-lot-dev
-      PGDATA: /run/pgsql-12.6-data
-      LOGGING_COLLECTOR: 'on'
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGDATA=${PGDATA}
+      - LOGGING_COLLECTOR='on'
