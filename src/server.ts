@@ -1,9 +1,12 @@
 import createServer from './infrastructure/express/index';
 import bunyan from 'bunyan';
 import config from './infrastructure/config';
-import objection from './infrastructure/objection';
+import { DBConnection } from './infrastructure/orm';
+import ObjectionORM from './infrastructure/orm/objection';
 
 const logger = bunyan.createLogger({ name: 'server' });
+
+const dbConnection = new DBConnection<ObjectionORM>(new ObjectionORM());
 
 process.on('uncaughtException', (err) => {
   logger.error('[UncaughtException] SERVER ERROR:', err);
@@ -18,7 +21,7 @@ process.on('unhandledRejection', (err: any, promise) =>
 
 const exitSignalHandler = (arg) => {
   logger.info('Exit code received', arg);
-  objection.disconnect();
+  dbConnection.disconnect();
 };
 process.on('SIGINT', exitSignalHandler);
 process.on('SIGUSR1', exitSignalHandler);
@@ -26,7 +29,7 @@ process.on('SIGUSR2', exitSignalHandler);
 
 logger.info('[STARTING] Server process at UTC:', new Date());
 
-objection.connect(config.knex.seeds.run).then(() => {
+dbConnection.connect(config.knex.seeds.run).then(() => {
   const app = createServer();
 
   app.listen(config.port, () => {
