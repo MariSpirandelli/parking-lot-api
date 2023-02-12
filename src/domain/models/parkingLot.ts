@@ -1,10 +1,15 @@
 import BaseModel from './baseModel';
+import { IParking } from './interfaces/iParking';
+import { IParkingLot } from './interfaces/iParkingLot';
+import { ISlot } from './interfaces/iSlot';
 import { Parking } from './parking';
 import { Slot } from './slot';
 
-export class ParkingLot extends BaseModel {
-  slots: Slot[];
-  parkings: Parking[];
+export class ParkingLot extends BaseModel implements IParkingLot {
+  name: string;
+
+  slots: ISlot[];
+  parkings: IParking[];
 
   static get tableName() {
     return 'parking_lots';

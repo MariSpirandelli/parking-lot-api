@@ -1,14 +1,14 @@
 import { Model, snakeCaseMappers } from 'objection';
+import { IBaseModel } from './interfaces/iBaseModel';
 
-export default abstract class BaseModel extends Model {
+export default abstract class BaseModel extends Model implements IBaseModel {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+
   static get columnNameMappers() {
     return snakeCaseMappers();
   }
-
-  id: number;
-
-  createdAt: string;
-  updatedAt: string;
 
   $beforeInsert() {
     this.createdAt = new Date().toISOString();

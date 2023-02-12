@@ -1,6 +1,5 @@
 import BaseModel from './baseModel';
-
-export type VehicleTypeEnum = 'car' | 'motorcycle' | 'van';
+import { VehicleTypeEnum } from './interfaces/iVehicleType';
 
 export class VehicleType extends BaseModel {
   type: VehicleTypeEnum;

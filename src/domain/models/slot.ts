@@ -1,17 +1,22 @@
 import BaseModel from './baseModel';
-import { ParkingLot } from './parkingLot';
+import { IParking } from './interfaces/iParking';
+import { IParkingLot } from './interfaces/iParkingLot';
+import { ISlot } from './interfaces/iSlot';
+import { IVehicleType } from './interfaces/iVehicleType';
+import { Parking } from './parking';
 import { VehicleType } from './vehicleType';
 
-export class Slot extends BaseModel {
+export class Slot extends BaseModel implements ISlot {
   parkingLotId: number;
   vehicleTypeId: number;
   leftSlotId: number;
   rightSlotId: number;
 
-  parkingLot: ParkingLot;
-  type: VehicleType;
-  leftSlot?: Slot;
-  rightSlot?: Slot;
+  parkingLot: IParkingLot;
+  parking: IParking;
+  type: IVehicleType;
+  leftSlot?: ISlot;
+  rightSlot?: ISlot;
 
   static get tableName() {
     return 'slots';
@@ -23,6 +28,11 @@ export class Slot extends BaseModel {
         join: { from: 'slots.vehicle_type_id', to: 'vehicle_types.id' },
         modelClass: VehicleType,
         relation: BaseModel.HasOneRelation,
+      },
+      parking: {
+        join: { from: 'parkings.slot_id', to: 'slots.id' },
+        modelClass: Parking,
+        relation: BaseModel.HasManyRelation,
       },
       leftSlot: {
         join: { from: 'slots.left_slot_id', to: 'slots.id' },

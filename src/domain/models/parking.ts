@@ -1,15 +1,18 @@
 import BaseModel from './baseModel';
+import { IParking } from './interfaces/iParking';
+import { ISlot } from './interfaces/iSlot';
+import { IVehicle } from './interfaces/iVehicle';
 import { Slot } from './slot';
 import { Vehicle } from './vehicle';
 
-export class Parking extends BaseModel {
+export class Parking extends BaseModel implements IParking {
   slotId: number;
   vehicleId: number;
   checkinAt: string;
   checkoutAt: string;
 
-  vehicle: Vehicle;
-  slot: Slot;
+  vehicle: IVehicle;
+  slot: ISlot;
 
   static get tableName() {
     return 'parkings';

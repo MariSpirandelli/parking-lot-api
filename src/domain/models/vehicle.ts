@@ -1,11 +1,13 @@
 import BaseModel from './baseModel';
+import { IVehicle } from './interfaces/iVehicle';
+import { IVehicleType } from './interfaces/iVehicleType';
 import { VehicleType } from './vehicleType';
 
-export class Vehicle extends BaseModel {
+export class Vehicle extends BaseModel implements IVehicle{
   vehicleTypeId: number;
   plate: string;
 
-  type: VehicleType;
+  type: IVehicleType;
 
   static get tableName() {
     return 'vehicles';
