@@ -1,9 +1,10 @@
+import { raw } from 'objection';
 import { SlotInput, ISlot, ISlotFilter } from '../models/interfaces/iSlot';
 import { Slot } from '../models/slot';
 import { ISlotRepository } from './interfaces/iSlotRepository';
 
 class SlotRepository implements ISlotRepository {
-  async persist(slot: SlotInput): Promise<ISlot> {
+  async persist(slot: SlotInput[]): Promise<ISlot[]> {
     return await Slot.query().insert(slot).returning('*');
   }
 
@@ -14,15 +15,23 @@ class SlotRepository implements ISlotRepository {
   async fetch(filter?: ISlotFilter): Promise<ISlot[]> {
     const slotBuilder = Slot.query();
 
-    if (filter.inUse) {
+    if (filter.id) {
+      slotBuilder.where('id', filter.id);
+    }
+
+    if (!!filter.inUse && filter.inUse) {
       slotBuilder.withGraphFetched('parking').whereNull('parking.checkout_at');
+    }
+
+    if (!!filter.inUse && !filter.inUse) {
+      slotBuilder.withGraphFetched('parking').whereNotNull('parking.checkout_at').having(raw(`count(parking.slotId) = 0`));
     }
 
     if (filter.vehicleTypeId) {
       slotBuilder.where('vehicle_type_id', filter.vehicleTypeId);
     }
 
-    return slotBuilder.select();
+    return slotBuilder.select().orderBy('id');
   }
 
   async remove(id: number): Promise<ISlot[]> {

@@ -9,14 +9,10 @@ import { VehicleType } from './vehicleType';
 export class Slot extends BaseModel implements ISlot {
   parkingLotId: number;
   vehicleTypeId: number;
-  leftSlotId: number;
-  rightSlotId: number;
 
-  parkingLot: IParkingLot;
-  parking: IParking;
-  type: IVehicleType;
-  leftSlot?: ISlot;
-  rightSlot?: ISlot;
+  parkingLot?: IParkingLot;
+  parking?: IParking;
+  type?: IVehicleType;
 
   static get tableName() {
     return 'slots';
