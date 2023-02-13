@@ -37,7 +37,7 @@ You have two options for seeding:
 #### Through .env variable:
 
 1. add `SEED_ON_DEPLOY=true` to the `.env`
-1. [start the project](how-to-run-the-project-locally)
+1. [start the project](#how-to-run-the-project-locally)
 
 #### Through Docker
 
