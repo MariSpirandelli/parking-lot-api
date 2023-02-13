@@ -2,15 +2,13 @@
 
 Parking system that allows a simple configuration of the number of spaces for each type of vehicle accepted, in addition to allowing vehicles to park, leave the parking lot and show an updated panel with the status of spaces for each type of vehicle supported space and notifies when the parking lot is full.
 
-It was developed as a monolithic project for easy execution and testing, applying best development practices such as clean architecture and SOLID principles.
+It was developed applying best development practices such as clean architecture and SOLID principles.
 
 ## Stack
 
 - NodeJs
 - Express
 - Typescript
-- React
-- NextJs
 - Jest
 - Postgres
 
