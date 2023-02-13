@@ -37,9 +37,4 @@ export class Parking extends BaseModel implements IParking {
     super.$beforeInsert();
     this.checkinAt = new Date().toISOString();
   }
-
-  $beforeUpdate() {
-    super.$beforeUpdate();
-    this.checkoutAt = new Date().toISOString();
-  }
 }

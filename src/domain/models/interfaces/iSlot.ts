@@ -7,7 +7,7 @@ export type SlotInput = Pick<ISlot, 'parkingLotId' | 'vehicleTypeId'>;
 export interface ISlotFilter {
   id?: number;
   inUse?: boolean;
-  vehicleTypeId?: number[];
+  vehicleTypeId?: number;
 }
 
 export interface ISlot extends IBaseModel {
