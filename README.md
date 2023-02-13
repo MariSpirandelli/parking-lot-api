@@ -10,6 +10,8 @@ It was developed as a monolithic project for easy execution and testing, applyin
 - Express
 - Typescript
 - React
+- NextJs
+- Jest
 - Postgres
 
 ## How to run the project locally
