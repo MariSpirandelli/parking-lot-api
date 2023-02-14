@@ -23,6 +23,7 @@ export default {
     '<rootDir>/build',
     `${rootDirector}/__tests__/fixtures`,
     `${rootDirector}/__tests__/setup.ts`,
+    `${rootDirector}/__tests__/mocks/*`,
   ],
   transform: {
     '^.+\\.ts$': [
