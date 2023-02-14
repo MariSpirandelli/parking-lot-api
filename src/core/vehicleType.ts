@@ -24,7 +24,23 @@ class VehicleTypeController implements IVehicleTypeController {
     return this.vehicleTypeRepo.persist(vehicleType);
   }
 
-  search() {
+  async search() {
+    let vehicleTypes: IVehicleType[] = this.getVehicleTypesFromCache();
+    if (vehicleTypes) {
+      return vehicleTypes;
+    }
+
+    vehicleTypes = await this.fetch();
+    if (!vehicleTypes) {
+      return null;
+    }
+
+    this.saveVehicleTypesToCache(vehicleTypes);
+
+    return vehicleTypes;
+  }
+
+  fetch() {
     return this.vehicleTypeRepo.fetch();
   }
 
@@ -71,7 +87,7 @@ class VehicleTypeController implements IVehicleTypeController {
       return vehicleTypes.filter((item) => item.id === typeId)[0];
     }
 
-    vehicleTypes = await this.search();
+    vehicleTypes = await this.fetch();
     if (!vehicleTypes) {
       return null;
     }
