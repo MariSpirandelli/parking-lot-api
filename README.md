@@ -12,6 +12,10 @@ It was developed applying best development practices such as clean architecture 
 - Jest
 - Postgres
 
+## Client app
+
+- [check it out](https://github.com/MariSpirandelli/parking-lot-app)
+
 ## How to run the project locally
 
 ### Setup
@@ -44,4 +48,63 @@ You have two options for seeding:
 1. run command: ```docker exec -it parking-lot-api-local-1 yarn seed```
 
 ## How to run tests
+
+1. run command `yarn test` or `npm test`
+
+# REST API
+
+## Set up parking lot slots
+
+### Request
+
+`PUT /parking-lot/:parkingLotId/setup`
+
+Example:
+
+```curl
+curl --location --request PUT 'http://localhost:3000/api/parking-lot/1/setup' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "slots": [
+        {
+            "vehicleTypeId": 1,
+            "quantity": 3
+        },
+        {
+            "vehicleTypeId": 2,
+            "quantity": 5
+        },
+        {
+            "vehicleTypeId": 3,
+            "quantity": 2
+        }
+    ]
+}'
+```
+
+### Response
+
+```json
+[
+    {
+        "vehicleTypeId": 1,
+        "parkingLotId": 1,
+        "createdAt": "2023-02-14T20:35:59.946Z",
+        "id": 1,
+        "updatedAt": null,
+        "leftSlotId": null,
+        "rightSlotId": null
+    },
+    ...
+    {
+        "vehicleTypeId": 3,
+        "parkingLotId": 1,
+        "createdAt": "2023-02-14T20:35:59.946Z",
+        "id": 10,
+        "updatedAt": null,
+        "leftSlotId": null,
+        "rightSlotId": null
+    }
+]
+```
 

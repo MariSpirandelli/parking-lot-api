@@ -40,3 +40,6 @@ Thumbs.db
 # Env files
 .env
 .env.*
+
+# My trash
+fastexperiment.ts
