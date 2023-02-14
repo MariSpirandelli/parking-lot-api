@@ -35,7 +35,11 @@ class SlotRepository implements ISlotRepository {
       slotBuilder.whereIn('vehicle_type_id', filter.vehiclesTypesIds);
     }
 
-    return slotBuilder.select().orderBy('id', filter.order || 'asc');
+    return slotBuilder
+      .select()
+      .withGraphFetched('vehicleType')
+      .orderBy('vehicleType.order', filter.order || 'asc')
+      .orderBy('slots.id', 'asc');
   }
 
   async remove(id: number): Promise<ISlot[]> {

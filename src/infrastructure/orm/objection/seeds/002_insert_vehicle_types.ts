@@ -5,14 +5,17 @@ exports.seed = (knex: Knex): Promise<any> => {
     {
       created_at: new Date().toISOString(),
       type: 'motorcycle',
+      order: 1,
     },
     {
       created_at: new Date().toISOString(),
       type: 'car',
+      order: 2,
     },
     {
       created_at: new Date().toISOString(),
       type: 'van',
+      order: 3,
     },
   ];
 

@@ -21,7 +21,7 @@ class VehicleTypeRepository implements IVehicleTypeRepository {
   }
 
   async fetch(): Promise<IVehicleType[]> {
-    return VehicleType.query().select();
+    return VehicleType.query().select().orderBy('order');
   }
 
   async remove(id: number): Promise<IVehicleType[]> {

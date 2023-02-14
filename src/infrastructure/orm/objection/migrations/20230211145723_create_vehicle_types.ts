@@ -7,6 +7,7 @@ export function up(knex: Knex) {
     table.dateTime('updated_at');
 
     table.enum('type', ['motorcycle', 'car', 'van']).notNullable();
+    table.integer('order').unique().unsigned();
   });
 }
 

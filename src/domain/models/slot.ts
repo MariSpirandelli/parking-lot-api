@@ -12,7 +12,7 @@ export class Slot extends BaseModel implements ISlot {
 
   parkingLot?: IParkingLot;
   parking?: IParking;
-  type?: IVehicleType;
+  vehicleType?: IVehicleType;
 
   static get tableName() {
     return 'slots';
@@ -20,7 +20,7 @@ export class Slot extends BaseModel implements ISlot {
 
   static get relationMappings() {
     return {
-      type: {
+      vehicleType: {
         join: { from: 'slots.vehicle_type_id', to: 'vehicle_types.id' },
         modelClass: VehicleType,
         relation: BaseModel.HasOneRelation,
