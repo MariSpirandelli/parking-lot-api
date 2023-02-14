@@ -10,10 +10,12 @@ import { ISlotController } from './interfaces/slot';
 import slotController from './slot';
 import { IVehicleTypeController } from './interfaces/vehicleType';
 import vehicleTypeController from './vehicleType';
-import { slotTypeOrder } from '../domain/models/interfaces/iVehicleType';
 import { IParkingLotController } from './interfaces/parkingLot';
+import bunyan from 'bunyan';
 
-class ParkingLotController implements IParkingLotController{
+const logger = bunyan.createLogger({ name: 'ParkingLotController' });
+
+class ParkingLotController implements IParkingLotController {
   parkingLotRepo: IParkingLotRepository;
 
   slotControl: ISlotController;
@@ -54,18 +56,13 @@ class ParkingLotController implements IParkingLotController{
       throw new NotFoundError('Parking lot not found');
     }
 
-    const sortedSlotsSetup: IParkingLotSetup[] = [];
-    slotsSetup.map(async (slotSetup) => {
-      const vehicleType = await this.vehicleTypeControl.getVehicleTypeByTypeId(
-        slotSetup.vehicleTypeId
-      );
-      sortedSlotsSetup[slotTypeOrder[vehicleType.type]] = slotSetup;
-    });
+    logger.info(`[setup] Setting up slots for parking lot ${id}`, slotsSetup);
 
     const parkingSlots: SlotInput[] = [];
-    sortedSlotsSetup.map((slotSetup) => {
+    slotsSetup.map((slotSetup) => {
       const { vehicleTypeId, quantity } = slotSetup;
-      new Array(quantity).map(() => {
+      const slotsToAdd = new Array(quantity).fill(1);
+      slotsToAdd.map(() => {
         parkingSlots.push({
           vehicleTypeId,
           parkingLotId: id,
