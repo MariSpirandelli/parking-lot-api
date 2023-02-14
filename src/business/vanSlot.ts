@@ -1,3 +1,4 @@
+import { OrderByDirection } from 'objection';
 import { ISlot } from '../domain/models/interfaces/iSlot';
 import { VehicleTypeEnum } from '../domain/models/interfaces/iVehicleType';
 import { ISlotRepository } from '../domain/repositories/interfaces/iSlotRepository';
@@ -10,6 +11,10 @@ export class VanSlot extends ParkingSlot {
     vehicleType: VehicleTypeEnum = 'van'
   ) {
     super(slotRepository, vehicleType);
+  }
+
+  get searchOrder(): OrderByDirection {
+    return 'desc';
   }
 
   getSlotsToPark(availableSlots: ISlot[], allowedSpots: string[]): ISlot[] {
@@ -27,13 +32,17 @@ export class VanSlot extends ParkingSlot {
 
   getOtherSlotTypeAvailable(allowedSpots: string[], availableSlots: ISlot[]) {
     for (let spot of allowedSpots) {
-      const sequentSpotNeeded =
-        ParkingSlotRule[this.vehicleType][allowedSpots[spot]];
+      const sequentSpotNeeded = ParkingSlotRule[this.vehicleType][spot];
+
       let countSequenceSpots = 0;
       let lastSpotId = availableSlots[0].id;
       let slotsToPark = [];
 
       for (let availableSpot of availableSlots) {
+        if (availableSpot.vehicleType.type !== spot) {
+          continue;
+        }
+
         if (availableSpot.id - lastSpotId <= 1) {
           countSequenceSpots++;
           slotsToPark.push(availableSpot);
