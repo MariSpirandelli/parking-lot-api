@@ -3,11 +3,13 @@ import { IParkingLot } from './iParkingLot';
 import { IVehicleType } from './iVehicleType';
 
 export type SlotInput = Pick<ISlot, 'parkingLotId' | 'vehicleTypeId'>;
+export type Ordering = 'asc' | 'desc';
 
 export interface ISlotFilter {
   id?: number;
   inUse?: boolean;
-  vehicleTypeId?: number;
+  vehiclesTypesIds?: number[];
+  order?: Ordering;
 }
 
 export interface ISlot extends IBaseModel {
@@ -15,7 +17,7 @@ export interface ISlot extends IBaseModel {
   vehicleTypeId: number;
 
   parkingLot?: IParkingLot;
-  type?: IVehicleType;
+  vehicleType?: IVehicleType;
   leftSlot?: ISlot;
   rightSlot?: ISlot;
 }

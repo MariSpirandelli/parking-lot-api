@@ -19,19 +19,23 @@ class SlotRepository implements ISlotRepository {
       slotBuilder.where('id', filter.id);
     }
 
-    if (!!filter.inUse && filter.inUse) {
-      slotBuilder.withGraphFetched('parking').whereNull('parking.checkout_at');
+    if (!!filter.inUse) {
+      slotBuilder.withGraphFetched('parking');
+
+      if (filter.inUse) {
+        slotBuilder.whereNull('parking.checkout_at');
+      } else {
+        slotBuilder
+          .whereNotNull('parking.checkout_at')
+          .having(raw(`count(parking.slotId) = 0`));
+      }
     }
 
-    if (!!filter.inUse && !filter.inUse) {
-      slotBuilder.withGraphFetched('parking').whereNotNull('parking.checkout_at').having(raw(`count(parking.slotId) = 0`));
+    if (filter.vehiclesTypesIds) {
+      slotBuilder.whereIn('vehicle_type_id', filter.vehiclesTypesIds);
     }
 
-    if (filter.vehicleTypeId) {
-      slotBuilder.where('vehicle_type_id', filter.vehicleTypeId);
-    }
-
-    return slotBuilder.select().orderBy('id');
+    return slotBuilder.select().orderBy('id', filter.order || 'asc');
   }
 
   async remove(id: number): Promise<ISlot[]> {
