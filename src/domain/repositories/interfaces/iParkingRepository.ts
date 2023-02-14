@@ -1,4 +1,4 @@
-import { IParking, IParkingFilter, ParkingCheckout, ParkingInput } from "src/domain/models/interfaces/iParking";
+import { IParking, IParkingFilter, ParkingCheckout, ParkingInput } from "../../../domain/models/interfaces/iParking";
 
 export interface IParkingRepository {
   persist: (parking: ParkingInput) => Promise<IParking>;

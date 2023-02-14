@@ -1,8 +1,8 @@
 import { Response, Request, Router } from 'express';
-import parkingController from 'src/core/parking';
+import parkingController from '../core/parking';
 import {
   BadRequestError,
-} from 'src/infrastructure/express/errors';
+} from '../infrastructure/express/errors';
 import { asyncHandler } from '../infrastructure/express/middlewares/errorHandler';
 
 const router = Router();

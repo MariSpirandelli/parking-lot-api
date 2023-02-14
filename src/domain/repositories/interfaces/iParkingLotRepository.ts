@@ -1,7 +1,7 @@
 import {
   IParkingLot,
   ParkingLotInput,
-} from 'src/domain/models/interfaces/iParkingLot';
+} from '../../../domain/models/interfaces/iParkingLot';
 
 export interface IParkingLotRepository {
   persist: (parkingLot: ParkingLotInput) => Promise<IParkingLot>;

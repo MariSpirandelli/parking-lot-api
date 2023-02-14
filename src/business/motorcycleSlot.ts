@@ -1,6 +1,6 @@
-import { ISlot } from 'src/domain/models/interfaces/iSlot';
-import { VehicleTypeEnum } from 'src/domain/models/interfaces/iVehicleType';
-import { ISlotRepository } from 'src/domain/repositories/interfaces/iSlotRepository';
+import { ISlot } from '../domain/models/interfaces/iSlot';
+import { VehicleTypeEnum } from '../domain/models/interfaces/iVehicleType';
+import { ISlotRepository } from '../domain/repositories/interfaces/iSlotRepository';
 import { ParkingSlot } from './parkingSlot';
 
 export class MotorcycleSlot extends ParkingSlot {

@@ -1,7 +1,7 @@
 import {
   IVehicleType,
   VehicleTypeInput,
-} from 'src/domain/models/interfaces/iVehicleType';
+} from '../../../domain/models/interfaces/iVehicleType';
 
 export interface IVehicleTypeRepository {
   persist: (slot: VehicleTypeInput) => Promise<IVehicleType>;

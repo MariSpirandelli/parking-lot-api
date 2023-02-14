@@ -2,8 +2,8 @@ import { OrderByDirection } from 'objection';
 import {
   IVehicleType,
   VehicleTypeEnum,
-} from 'src/domain/models/interfaces/iVehicleType';
-import { ISlotRepository } from 'src/domain/repositories/interfaces/iSlotRepository';
+} from '../domain/models/interfaces/iVehicleType';
+import { ISlotRepository } from '../domain/repositories/interfaces/iSlotRepository';
 import { ISlot } from '../domain/models/interfaces/iSlot';
 import { IParkingSlot, ParkingSlotRule } from './interfaces/iParkingSlot';
 

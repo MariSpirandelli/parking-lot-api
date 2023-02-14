@@ -1,5 +1,5 @@
 import { Response, Request, Router } from 'express';
-import { IParkingLotSetup } from 'src/domain/models/interfaces/iParkingLot';
+import { IParkingLotSetup } from '../domain/models/interfaces/iParkingLot';
 import parkingLotController from '../core/parkingLot';
 import { BadRequestError } from '../infrastructure/express/errors';
 import { asyncHandler } from '../infrastructure/express/middlewares/errorHandler';

@@ -1,5 +1,5 @@
-import { ParkingInput, IParking, IParkingFilter, ParkingCheckin } from "src/domain/models/interfaces/iParking";
-import { ISlot } from "src/domain/models/interfaces/iSlot";
+import { ParkingInput, IParking, IParkingFilter, ParkingCheckin } from "../../domain/models/interfaces/iParking";
+import { ISlot } from "../../domain/models/interfaces/iSlot";
 
 export interface IParkingController {
     create: (parking: ParkingInput) => Promise<IParking>;

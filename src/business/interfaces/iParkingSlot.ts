@@ -1,9 +1,9 @@
 import { OrderByDirection } from 'objection';
-import { ISlot } from 'src/domain/models/interfaces/iSlot';
+import { ISlot } from '../../domain/models/interfaces/iSlot';
 import {
   IVehicleType,
   VehicleTypeEnum,
-} from 'src/domain/models/interfaces/iVehicleType';
+} from '../../domain/models/interfaces/iVehicleType';
 
 export type Rule = {
   [key in VehicleTypeEnum]?: number;

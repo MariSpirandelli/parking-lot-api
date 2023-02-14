@@ -1,4 +1,4 @@
-import slotRepo from 'src/domain/repositories/slot';
+import slotRepo from '../../domain/repositories/slot';
 import { VehicleTypeEnum } from '../../domain/models/interfaces/iVehicleType';
 import { ISlotRepository } from '../../domain/repositories/interfaces/iSlotRepository';
 import { CarSlot } from '../carSlot';

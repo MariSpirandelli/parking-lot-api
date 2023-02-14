@@ -2,7 +2,7 @@ import {
   ISlot,
   ISlotFilter,
   SlotInput,
-} from 'src/domain/models/interfaces/iSlot';
+} from '../../../domain/models/interfaces/iSlot';
 
 export interface ISlotRepository {
   persist: (slot: SlotInput[]) => Promise<ISlot[]>;

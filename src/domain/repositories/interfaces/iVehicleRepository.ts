@@ -1,4 +1,4 @@
-import { IVehicle, IVehicleFilter, VehicleInput } from 'src/domain/models/interfaces/iVehicle';
+import { IVehicle, IVehicleFilter, VehicleInput } from '../../../domain/models/interfaces/iVehicle';
 
 export interface IVehicleRepository {
   persist: (slot: VehicleInput) => Promise<IVehicle>;

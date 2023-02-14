@@ -1,7 +1,7 @@
 import {
   VehicleTypeInput,
   IVehicleType,
-} from 'src/domain/models/interfaces/iVehicleType';
+} from '../../domain/models/interfaces/iVehicleType';
 
 export interface IVehicleTypeController {
   create: (vehicle: VehicleTypeInput) => Promise<IVehicleType>;

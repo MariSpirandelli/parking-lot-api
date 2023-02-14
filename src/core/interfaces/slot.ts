@@ -2,7 +2,7 @@ import {
   SlotInput,
   ISlot,
   ISlotFilter,
-} from 'src/domain/models/interfaces/iSlot';
+} from '../../domain/models/interfaces/iSlot';
 
 export interface ISlotController {
   create: (slot: SlotInput[]) => Promise<ISlot[]>;
