@@ -3,7 +3,6 @@ import { VehicleTypeEnum } from '../../domain/models/interfaces/iVehicleType';
 import { ISlotRepository } from '../../domain/repositories/interfaces/iSlotRepository';
 import { CarSlot } from '../carSlot';
 import { MotorcycleSlot } from '../motorcycleSlot';
-import { ParkingSlot } from '../parkingSlot';
 import { VanSlot } from '../vanSlot';
 
 class ParkingSlotFactory {
@@ -16,13 +15,11 @@ class ParkingSlotFactory {
   getParkingSlotByVehicleType(vehicleType: VehicleTypeEnum) {
     switch (vehicleType) {
       case 'motorcycle':
-        return new ParkingSlot(
-          new MotorcycleSlot(vehicleType, this.slotRepository)
-        );
+        return new MotorcycleSlot(this.slotRepository);
       case 'car':
-        return new ParkingSlot(new CarSlot(vehicleType, this.slotRepository));
+        return new CarSlot(this.slotRepository);
       case 'van':
-        return new ParkingSlot(new VanSlot(vehicleType, this.slotRepository));
+        return new VanSlot(this.slotRepository);
 
       default:
         throw new Error('Vehicle not supported');

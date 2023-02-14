@@ -1,28 +1,17 @@
 import { ISlot } from 'src/domain/models/interfaces/iSlot';
 import { VehicleTypeEnum } from 'src/domain/models/interfaces/iVehicleType';
 import { ISlotRepository } from 'src/domain/repositories/interfaces/iSlotRepository';
-import { IParkingSlot } from './interfaces/iParkingSlot';
+import { ParkingSlot } from './parkingSlot';
 
-export class MotorcycleSlot implements IParkingSlot {
-  vehicleType: VehicleTypeEnum;
-  slotRepository: ISlotRepository;
-
+export class MotorcycleSlot extends ParkingSlot {
   constructor(
-    vehicleType: VehicleTypeEnum = 'motorcycle',
-    slotRepository: ISlotRepository
+    slotRepository: ISlotRepository,
+    vehicleType: VehicleTypeEnum = 'motorcycle'
   ) {
-    this.vehicleType = vehicleType;
-    this.slotRepository = slotRepository;
+    super(slotRepository, vehicleType);
   }
 
-  async defineSlotToPark(): Promise<ISlot[]> {
-    const availableSlots = await this.slotRepository.fetch({
-      inUse: false,
-    });
-    if (!availableSlots?.length) {
-      return null;
-    }
-
+  getSlotsToPark(availableSlots: ISlot[]): ISlot[] {
     /**
      * [business rule]: A motorcycle can park in any spot
      * since it returns ordered, get first available

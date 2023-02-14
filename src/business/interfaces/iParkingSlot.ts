@@ -1,3 +1,4 @@
+import { OrderByDirection } from 'objection';
 import { ISlot } from 'src/domain/models/interfaces/iSlot';
 import {
   IVehicleType,
@@ -21,4 +22,6 @@ export const ParkingSlotRule: ParkingRule = {
 export interface IParkingSlot {
   vehicleType: VehicleTypeEnum;
   defineSlotToPark: (vehicleTypes: IVehicleType[]) => Promise<ISlot[]>;
+  searchOrder: OrderByDirection;
+  getSlotsToPark: (availableSlots: ISlot[], allowedSpots: string[]) => ISlot[];
 }

@@ -1,38 +1,18 @@
 import { ISlot } from '../domain/models/interfaces/iSlot';
-import {
-  IVehicleType,
-  VehicleTypeEnum,
-} from '../domain/models/interfaces/iVehicleType';
+import { VehicleTypeEnum } from '../domain/models/interfaces/iVehicleType';
 import { ISlotRepository } from '../domain/repositories/interfaces/iSlotRepository';
-import { IParkingSlot, ParkingSlotRule } from './interfaces/iParkingSlot';
+import { ParkingSlotRule } from './interfaces/iParkingSlot';
+import { ParkingSlot } from './parkingSlot';
 
-export class VanSlot implements IParkingSlot {
-  vehicleType: VehicleTypeEnum;
-  slotRepository: ISlotRepository;
-
+export class VanSlot extends ParkingSlot {
   constructor(
-    vehicleType: VehicleTypeEnum = 'van',
-    slotRepository: ISlotRepository
+    slotRepository: ISlotRepository,
+    vehicleType: VehicleTypeEnum = 'van'
   ) {
-    this.vehicleType = vehicleType;
-    this.slotRepository = slotRepository;
+    super(slotRepository, vehicleType);
   }
 
-  async defineSlotToPark(vehicleTypes: IVehicleType[]): Promise<ISlot[]> {
-    const allowedSpots = Object.keys(ParkingSlotRule[this.vehicleType]);
-    const vehiclesTypesIds = vehicleTypes
-      .filter((vehicleType) => allowedSpots.includes(vehicleType.type))
-      .map((vehicleType) => vehicleType.id);
-
-    const availableSlots = await this.slotRepository.fetch({
-      inUse: false,
-      vehiclesTypesIds,
-      order: 'desc',
-    });
-    if (!availableSlots?.length) {
-      return null;
-    }
-
+  getSlotsToPark(availableSlots: ISlot[], allowedSpots: string[]): ISlot[] {
     /**
      * [business rule]: A van can park in both car or van spots
      * it takes 3 car spots though
