@@ -65,13 +65,6 @@ class ParkingController implements IParkingController {
     return this.parkingRepo.update(id, parkingInput);
   }
 
-  // TODO: implement logic
-  async getAvailable(vehicleTypeId: number): Promise<ISlot[]>{
-      const availableSlots = this.slotControl.search({inUse: false, vehicleTypeId});
-
-      return availableSlots;
-  }
-
   async park(parking: ParkingCheckin): Promise<ISlot[]> {
     const { parkingLotId, vehicleId } = parking;
 
@@ -87,17 +80,21 @@ class ParkingController implements IParkingController {
       throw new NotFoundError('Parking lot not found');
     }
 
-    const availableSlots = await this.getAvailable(vehicle.vehicleTypeId);
+    const availableSlots = await this.slotControl.getAvailable(
+      vehicle.vehicleTypeId
+    );
 
     if (!availableSlots) {
-      throw new Error(`Parking lot reached maximum limit for ${vehicle.type.type}`);
+      throw new Error(
+        `Parking lot reached maximum limit for ${vehicle.type.type}`
+      );
     }
 
     const parkingSpaces = availableSlots.map((slot) => {
       return {
         slotId: slot.id,
-        vehicleId
-      }
+        vehicleId,
+      };
     });
 
     await this.parkingRepo.saveAll(parkingSpaces);
