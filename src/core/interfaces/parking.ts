@@ -6,5 +6,5 @@ export interface IParkingController {
     update: (id: number, parking: ParkingInput) => Promise<IParking[]>;
     search: (filter?: IParkingFilter) => Promise<IParking[]>;
     park: (parking: ParkingCheckin) => Promise<ISlot[]>;
-    remove: (id: number) => Promise<IParking[]>;
+    remove: (vehicleId: number, parkingLotId: number) => Promise<IParking[]>;
   }

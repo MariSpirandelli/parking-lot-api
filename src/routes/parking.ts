@@ -1,44 +1,51 @@
 import { Response, Request, Router } from 'express';
 import parkingController from '../core/parking';
-import {
-  BadRequestError,
-} from '../infrastructure/express/errors';
+import { BadRequestError } from '../infrastructure/express/errors';
 import { asyncHandler } from '../infrastructure/express/middlewares/errorHandler';
 
 const router = Router();
 
 router.post(
-  '/',
+  '/:parkingLotId',
   asyncHandler(async (req: Request, res: Response) => {
-    const slotId = parseInt(req.body.slotId, 10);
+    const parkingLotId = parseInt(req.params.parkingLotId, 10);
+
+    if (isNaN(parkingLotId)) {
+      throw new BadRequestError('Missing parking lot id');
+    }
+
     const vehicleId = parseInt(req.body.vehicleId, 10);
 
-    if (isNaN(slotId) || isNaN(vehicleId)) {
+    if (isNaN(vehicleId)) {
       throw new BadRequestError(
-        'Slot id and vehicle id are mandatory and must be valid values'
+        'Vehicle id are mandatory and must be valid value'
       );
     }
 
     return res
       .status(200)
-      .json(await parkingController.create({ slotId, vehicleId }));
+      .json(await parkingController.park({ vehicleId, parkingLotId }));
   })
 );
 
 router.put(
-  '/:parkingId',
+  '/:parkingLotId/remove/:vehicleId',
   asyncHandler(async (req: Request, res: Response) => {
-    const parkingId = parseInt(req.params.parkingId, 10);
+    const parkingLotId = parseInt(req.params.parkingLotId, 10);
 
-    if (isNaN(parkingId)) {
+    if (isNaN(parkingLotId)) {
       throw new BadRequestError('Missing parking lot id');
     }
 
-    const { slotId, vehicleId } = req.body;
+    const vehicleId = parseInt(req.params.vehicleId, 10);
+
+    if (isNaN(vehicleId)) {
+      throw new BadRequestError('Missing parking lot id');
+    }
 
     return res
       .status(200)
-      .json(await parkingController.update(parkingId, { slotId, vehicleId }));
+      .json(await parkingController.remove(vehicleId, parkingLotId));
   })
 );
 

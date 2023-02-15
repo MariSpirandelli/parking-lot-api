@@ -58,7 +58,9 @@ class ParkingController implements IParkingController {
   }
 
   async update(id: number, parkingInput: ParkingInput) {
-    const parking = await this.search({ id });
+    const parking = await this.search({
+      id,
+    });
     if (!parking) {
       throw new NotFoundError('Parking not found');
     }
@@ -80,8 +82,11 @@ class ParkingController implements IParkingController {
       throw new NotFoundError('Parking lot not found');
     }
 
-    const availableSlots = await this.slotControl.getAvailable(
-      vehicle.vehicleTypeId
+    let availableSlots = [];
+
+    availableSlots = await this.slotControl.getAvailable(
+      vehicle.vehicleTypeId,
+      parkingLotId
     );
 
     if (!availableSlots) {
@@ -90,7 +95,10 @@ class ParkingController implements IParkingController {
       );
     }
 
+    const slotsIds = [];
     const parkingSpaces = availableSlots.map((slot) => {
+      slotsIds.push(slot.id);
+
       return {
         slotId: slot.id,
         vehicleId,
@@ -99,13 +107,23 @@ class ParkingController implements IParkingController {
 
     await this.parkingRepo.saveAll(parkingSpaces);
 
-    return availableSlots;
+    return this.slotControl.setAvailablility(slotsIds, 'occupied');
   }
 
-  async remove(id: number): Promise<IParking[]> {
-    return this.parkingRepo.update(id, {
-      checkoutAt: new Date().toISOString(),
+  async remove(vehicleId: number, parkingLotId: number): Promise<IParking[]> {
+    const occupiedSlots = await this.parkingRepo.fetch({
+      vehicleId,
+      inUse: true,
     });
+    if (!occupiedSlots?.length) {
+      throw new NotFoundError('Vehicle not parked');
+    }
+
+    const slotsIds = occupiedSlots.map((parking) => parking.slotId);
+
+    await this.slotControl.setAvailablility(slotsIds, 'available');
+
+    return this.parkingRepo.remove(vehicleId, parkingLotId);
   }
 }
 

@@ -26,6 +26,12 @@ class ParkingRepository implements IParkingRepository {
   async fetch(filter?: IParkingFilter): Promise<IParking[]> {
     const parkingBuilder = Parking.query();
 
+    if (filter?.parkingLotId) {
+      parkingBuilder
+        .withGraphJoined('slot')
+        .where('slot.parking_lot_id', filter.parkingLotId);
+    }
+
     if (filter?.id) {
       parkingBuilder.where('id', filter?.id);
     }
@@ -43,9 +49,13 @@ class ParkingRepository implements IParkingRepository {
     return parkingBuilder.select();
   }
 
-  async remove(id: number): Promise<IParking[]> {
-    await Parking.query().deleteById(id);
-    return this.fetch({ inUse: true });
+  async remove(vehicleId: number, parkingLotId: number): Promise<IParking[]> {
+    await Parking.query()
+      .update({ checkoutAt: new Date().toISOString() })
+      .where('vehicle_id', vehicleId)
+      .whereNull('checkout_at');
+
+    return this.fetch({ inUse: true, parkingLotId });
   }
 }
 

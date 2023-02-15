@@ -17,6 +17,7 @@ export interface IParkingFilter {
   slotId?: number;
   vehicleId?: number;
   inUse?: boolean;
+  parkingLotId?: number;
 }
 
 export interface IParking extends IBaseModel {

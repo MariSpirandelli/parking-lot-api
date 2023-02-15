@@ -4,6 +4,6 @@ export interface IParkingRepository {
   persist: (parking: ParkingInput) => Promise<IParking>;
   update: (id: number, parking: ParkingInput | ParkingCheckout) => Promise<IParking[]>;
   fetch: (filter?: IParkingFilter) => Promise<IParking[]>;
-  remove: (id: number) => Promise<IParking[]>
+  remove: (vehicleId: number, parkingLotId: number) => Promise<IParking[]>
   saveAll: (parking: ParkingInput[]) => Promise<IParking[]>;
 }
