@@ -66,6 +66,7 @@ class ParkingLotController implements IParkingLotController {
         parkingSlots.push({
           vehicleTypeId,
           parkingLotId: id,
+          status: 'available',
         });
       });
     });
