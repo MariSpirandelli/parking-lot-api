@@ -3,6 +3,7 @@ import {
   ISlot,
   ISlotFilter,
   SlotInput,
+  SlotStatus,
 } from '../domain/models/interfaces/iSlot';
 import { ISlotRepository } from '../domain/repositories/interfaces/iSlotRepository';
 import slotRepo from '../domain/repositories/slot';
@@ -31,11 +32,14 @@ class SlotController implements ISlotController {
     return this.slotRepo.fetch(slotfilters);
   }
 
-  update(id: number, slot: SlotInput) {
-    return this.slotRepo.update(id, slot);
+  update(id: number, slot: Partial<SlotInput>) {
+    return this.slotRepo.update(id,slot);
   }
 
-  async getAvailable(vehicleTypeId: number): Promise<ISlot[]> {
+  async getAvailable(
+    vehicleTypeId: number,
+    parkingLotId: number
+  ): Promise<ISlot[]> {
     const vehicleTypes = await this.vehicleTypeControl.search();
 
     const vehicleType = vehicleTypes.filter(
@@ -44,9 +48,14 @@ class SlotController implements ISlotController {
 
     const parkingSlot = parkingSlotFactory.getParkingSlotByVehicleType(
       vehicleType.type,
+      parkingLotId
     );
 
     return parkingSlot.defineSlotToPark(vehicleTypes);
+  }
+
+  async setAvailablility(slotsIds: number[], status: SlotStatus): Promise<ISlot[]>{
+    return this.slotRepo.updateMany(slotsIds, {status})
   }
 }
 
