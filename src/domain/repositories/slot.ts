@@ -15,31 +15,40 @@ class SlotRepository implements ISlotRepository {
   async fetch(filter?: ISlotFilter): Promise<ISlot[]> {
     const slotBuilder = Slot.query();
 
-    if (filter.id) {
-      slotBuilder.where('id', filter.id);
+    if (filter?.id) {
+      slotBuilder.where('id', filter?.id);
     }
 
-    if (!!filter.inUse) {
+    if (typeof filter?.inUse === 'boolean') {
       slotBuilder.withGraphFetched('parking');
 
-      if (filter.inUse) {
-        slotBuilder.whereNull('parking.checkout_at');
+      if (filter?.inUse) {
+        slotBuilder.where((internalBuilder) =>
+          internalBuilder
+            .whereNotNull('parking.checkin_at')
+            .andWhere('parking.checkout_at', null)
+        );
       } else {
-        slotBuilder
-          .whereNotNull('parking.checkout_at')
-          .having(raw(`count(parking.slotId) = 0`));
+        slotBuilder.where((internalBuilder) =>
+          internalBuilder
+            .whereNull('parking.slot_id')
+            .orWhereNotNull('parking.checkout_at')
+            .groupBy(['slots.id', 'parking.id', 'vehicleType.id'])
+            .having(raw(`count(parking.slot_id) = 0`))
+        );
       }
     }
 
-    if (filter.vehiclesTypesIds) {
-      slotBuilder.whereIn('vehicle_type_id', filter.vehiclesTypesIds);
+    if (filter?.vehiclesTypesIds) {
+      slotBuilder.whereIn('vehicle_type_id', filter?.vehiclesTypesIds);
     }
 
     return slotBuilder
       .select()
-      .withGraphFetched('vehicleType')
-      .orderBy('vehicleType.order', filter.order || 'asc')
-      .orderBy('slots.id', 'asc');
+      .withGraphJoined('vehicleType')
+      .orderBy('vehicleType.order', filter?.order || 'asc')
+      .orderBy('slots.id', 'asc')
+      .debug();
   }
 
   async remove(id: number): Promise<ISlot[]> {

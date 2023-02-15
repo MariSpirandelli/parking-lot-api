@@ -26,18 +26,18 @@ class ParkingRepository implements IParkingRepository {
   async fetch(filter?: IParkingFilter): Promise<IParking[]> {
     const parkingBuilder = Parking.query();
 
-    if (filter.id) {
-      parkingBuilder.where('id', filter.id);
+    if (filter?.id) {
+      parkingBuilder.where('id', filter?.id);
     }
 
-    if (filter.inUse) {
+    if (filter?.inUse) {
       parkingBuilder.whereNull('checkout_at');
     }
-    if (filter.slotId) {
-      parkingBuilder.where('slot_id', filter.slotId);
+    if (filter?.slotId) {
+      parkingBuilder.where('slot_id', filter?.slotId);
     }
-    if (filter.vehicleId) {
-      parkingBuilder.where('vehicle_id', filter.vehicleId);
+    if (filter?.vehicleId) {
+      parkingBuilder.where('vehicle_id', filter?.vehicleId);
     }
 
     return parkingBuilder.select();

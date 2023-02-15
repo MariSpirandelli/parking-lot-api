@@ -9,6 +9,7 @@ export interface ISlotFilter {
   id?: number;
   inUse?: boolean;
   vehiclesTypesIds?: number[];
+  parkingLotId?: number;
   order?: OrderByDirection;
 }
 

@@ -1,11 +1,13 @@
 import express from 'express';
 
-import parkingLotRouter from './parkingLot';
 import parkingRouter from './parking';
+import parkingLotRouter from './parkingLot';
+import slotRouter from './slot';
 
 const router = express.Router();
 
-router.use('/parking-lot', parkingLotRouter);
-router.use('/parking', parkingRouter);
+router.use('/parkings', parkingRouter);
+router.use('/parking-lots', parkingLotRouter);
+router.use('/slots', slotRouter);
 
 export = router;
