@@ -6,9 +6,10 @@ import { ParkingSlot } from './parkingSlot';
 export class CarSlot extends ParkingSlot {
   constructor(
     slotRepository: ISlotRepository,
+    parkingLotId: number,
     vehicleType: VehicleTypeEnum = 'car'
   ) {
-    super(slotRepository, vehicleType);
+    super(slotRepository, parkingLotId, vehicleType);
   }
 
   getSlotsToPark(availableSlots: ISlot[]): ISlot[] {

@@ -20,6 +20,7 @@ export const ParkingSlotRule: ParkingRule = {
 };
 
 export interface IParkingSlot {
+  parkingLotId: number;
   vehicleType: VehicleTypeEnum;
   defineSlotToPark: (vehicleTypes: IVehicleType[]) => Promise<ISlot[]>;
   searchOrder: OrderByDirection;

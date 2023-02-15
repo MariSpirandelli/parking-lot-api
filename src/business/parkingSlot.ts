@@ -9,10 +9,16 @@ import { IParkingSlot, ParkingSlotRule } from './interfaces/iParkingSlot';
 
 export abstract class ParkingSlot implements IParkingSlot {
   vehicleType: VehicleTypeEnum;
+  parkingLotId: number;
   slotRepository: ISlotRepository;
 
-  constructor(slotRepository: ISlotRepository, vehicleType: VehicleTypeEnum) {
+  constructor(
+    slotRepository: ISlotRepository,
+    parkingLotId: number,
+    vehicleType: VehicleTypeEnum
+  ) {
     this.vehicleType = vehicleType;
+    this.parkingLotId = parkingLotId;
     this.slotRepository = slotRepository;
   }
 
@@ -35,6 +41,7 @@ export abstract class ParkingSlot implements IParkingSlot {
       inUse: false,
       vehiclesTypesIds,
       order: this.searchOrder,
+      parkingLotId: this.parkingLotId,
     });
 
     if (!availableSlots?.length) {

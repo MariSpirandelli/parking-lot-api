@@ -8,9 +8,10 @@ import { ParkingSlot } from './parkingSlot';
 export class VanSlot extends ParkingSlot {
   constructor(
     slotRepository: ISlotRepository,
+    parkingLotId: number,
     vehicleType: VehicleTypeEnum = 'van'
   ) {
-    super(slotRepository, vehicleType);
+    super(slotRepository, parkingLotId, vehicleType);
   }
 
   get searchOrder(): OrderByDirection {

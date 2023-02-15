@@ -12,14 +12,14 @@ class ParkingSlotFactory {
     this.slotRepository = slotRepository;
   }
 
-  getParkingSlotByVehicleType(vehicleType: VehicleTypeEnum) {
+  getParkingSlotByVehicleType(vehicleType: VehicleTypeEnum, parkingLotId: number) {
     switch (vehicleType) {
       case 'motorcycle':
-        return new MotorcycleSlot(this.slotRepository);
+        return new MotorcycleSlot(this.slotRepository, parkingLotId);
       case 'car':
-        return new CarSlot(this.slotRepository);
+        return new CarSlot(this.slotRepository, parkingLotId);
       case 'van':
-        return new VanSlot(this.slotRepository);
+        return new VanSlot(this.slotRepository, parkingLotId);
 
       default:
         throw new Error('Vehicle not supported');
