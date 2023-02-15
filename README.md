@@ -166,3 +166,129 @@ curl --location --request GET 'http://localhost:3000/api/slots/1' \
 ]
 
 ```
+
+## Save vehicle
+
+### Request
+
+`POST /api/vechicles/:parkingLot`
+
+Example
+
+```curl
+curl --location --request POST 'http://localhost:3000/api/vehicles/' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "plate": "MARC888",
+    "vehicleTypeId": 2
+}'
+```
+
+### Response
+
+```json
+{
+    "plate": "MARC888",
+    "vehicleTypeId": 2,
+    "createdAt": "2023-02-15T13:25:00.577Z",
+    "id": 2,
+    "updatedAt": null
+}
+
+```
+
+## Parking
+
+### Request
+
+`POST /api/parkings/:parkingLot`
+
+Example
+
+```curl
+curl --location --request POST 'http://localhost:3000/api/parkings/1' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "vehicleId": 2
+}'
+```
+
+### Response
+
+```json
+[
+    {
+        "id": 4,
+        "createdAt": "2023-02-15T12:38:07.342Z",
+        "updatedAt": "2023-02-15T14:21:53.664Z",
+        "parkingLotId": 1,
+        "vehicleTypeId": 2,
+        "status": "occupied",
+        "leftSlotId": null,
+        "rightSlotId": null
+    }
+]
+
+```
+
+## Remove vehicle from parking lot
+
+### Request
+
+`PUT /api/parkings/:parkingLot/remove/:vehicleId`
+
+Example
+
+```curl
+curl --location --request PUT 'http://localhost:3000/api/parkings/1/remove/2' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "vehicleId": 1
+}'
+```
+
+### Response
+
+```json
+[
+    {
+        "id": 7,
+        "createdAt": "2023-02-15T14:43:15.471Z",
+        "updatedAt": null,
+        "slotId": 2,
+        "vehicleId": 1,
+        "checkinAt": "2023-02-15T14:43:15.471Z",
+        "checkoutAt": null,
+        "slot": {
+            "id": 2,
+            "createdAt": "2023-02-15T12:38:07.342Z",
+            "updatedAt": "2023-02-15T14:43:15.473Z",
+            "parkingLotId": 1,
+            "vehicleTypeId": 1,
+            "status": "occupied",
+            "leftSlotId": null,
+            "rightSlotId": null
+        }
+    },
+    {
+        "id": 8,
+        "createdAt": "2023-02-15T14:43:46.245Z",
+        "updatedAt": null,
+        "slotId": 9,
+        "vehicleId": 3,
+        "checkinAt": "2023-02-15T14:43:46.245Z",
+        "checkoutAt": null,
+        "slot": {
+            "id": 9,
+            "createdAt": "2023-02-15T12:38:07.342Z",
+            "updatedAt": "2023-02-15T14:43:46.246Z",
+            "parkingLotId": 1,
+            "vehicleTypeId": 3,
+            "status": "occupied",
+            "leftSlotId": null,
+            "rightSlotId": null
+        }
+    }
+]
+
+```
