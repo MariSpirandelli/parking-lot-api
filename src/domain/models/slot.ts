@@ -1,7 +1,7 @@
 import BaseModel from './baseModel';
 import { IParking } from './interfaces/iParking';
 import { IParkingLot } from './interfaces/iParkingLot';
-import { ISlot } from './interfaces/iSlot';
+import { ISlot, SlotStatus } from './interfaces/iSlot';
 import { IVehicleType } from './interfaces/iVehicleType';
 import { Parking } from './parking';
 import { VehicleType } from './vehicleType';
@@ -9,6 +9,7 @@ import { VehicleType } from './vehicleType';
 export class Slot extends BaseModel implements ISlot {
   parkingLotId: number;
   vehicleTypeId: number;
+  status: SlotStatus;
 
   parkingLot?: IParkingLot;
   parking?: IParking;
