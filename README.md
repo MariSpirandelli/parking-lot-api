@@ -57,12 +57,12 @@ You have two options for seeding:
 
 ### Request
 
-`PUT /parking-lot/:parkingLotId/setup`
+`PUT /api/parking-lots/:parkingLotId/setup`
 
 Example:
 
 ```curl
-curl --location --request PUT 'http://localhost:3000/api/parking-lot/1/setup' \
+curl --location --request PUT 'http://localhost:3000/api/parking-lots/1/setup' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "slots": [
@@ -108,3 +108,61 @@ curl --location --request PUT 'http://localhost:3000/api/parking-lot/1/setup' \
 ]
 ```
 
+## Get available slots
+
+### Request
+
+`GET /api/slots/:parkingLot`
+
+Example
+
+```curl
+curl --location --request GET 'http://localhost:3000/api/slots/1' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "inUse": false
+}'
+```
+
+### Response
+
+```json
+[
+    {
+        "id": 1,
+        "createdAt": "2023-02-14T23:55:33.130Z",
+        "updatedAt": null,
+        "parkingLotId": 1,
+        "vehicleTypeId": 1,
+        "leftSlotId": null,
+        "rightSlotId": null,
+        "parking": [],
+        "vehicleType": {
+            "id": 1,
+            "createdAt": "2023-02-14T22:56:02.702Z",
+            "updatedAt": null,
+            "type": "motorcycle",
+            "order": 1
+        }
+    },
+    ...
+    {
+        "id": 10,
+        "createdAt": "2023-02-14T23:55:33.130Z",
+        "updatedAt": null,
+        "parkingLotId": 1,
+        "vehicleTypeId": 3,
+        "leftSlotId": null,
+        "rightSlotId": null,
+        "parking": [],
+        "vehicleType": {
+            "id": 3,
+            "createdAt": "2023-02-14T22:56:02.702Z",
+            "updatedAt": null,
+            "type": "van",
+            "order": 3
+        }
+    }
+]
+
+```
