@@ -11,7 +11,7 @@ class SlotRepository implements ISlotRepository {
     return await Slot.query().update(slot).where({ id }).returning('*');
   }
 
-  async updateMany(ids: number[], properties: Partial<SlotInput>): Promise<ISlot[]>{
+  async updateMany(ids: number[], properties: Partial<SlotInput>): Promise<ISlot[]> {
     return await Slot.query().update(properties).whereIn('id', ids).returning('*');
   }
 

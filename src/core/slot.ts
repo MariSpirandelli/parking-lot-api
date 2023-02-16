@@ -1,10 +1,5 @@
 import parkingSlotFactory from '../business/factories/parkingSlotFactory';
-import {
-  ISlot,
-  ISlotFilter,
-  SlotInput,
-  SlotStatus,
-} from '../domain/models/interfaces/iSlot';
+import { ISlot, ISlotFilter, SlotInput, SlotStatus } from '../domain/models/interfaces/iSlot';
 import { ISlotRepository } from '../domain/repositories/interfaces/iSlotRepository';
 import slotRepo from '../domain/repositories/slot';
 import { ISlotController } from './interfaces/slot';
@@ -16,10 +11,7 @@ class SlotController implements ISlotController {
 
   vehicleTypeControl: IVehicleTypeController;
 
-  constructor(
-    slotRepo: ISlotRepository,
-    vehicleTypeControl: IVehicleTypeController
-  ) {
+  constructor(slotRepo: ISlotRepository, vehicleTypeControl: IVehicleTypeController) {
     this.slotRepo = slotRepo;
     this.vehicleTypeControl = vehicleTypeControl;
   }
@@ -33,29 +25,21 @@ class SlotController implements ISlotController {
   }
 
   update(id: number, slot: Partial<SlotInput>) {
-    return this.slotRepo.update(id,slot);
+    return this.slotRepo.update(id, slot);
   }
 
-  async getAvailable(
-    vehicleTypeId: number,
-    parkingLotId: number
-  ): Promise<ISlot[]> {
+  async getAvailable(vehicleTypeId: number, parkingLotId: number): Promise<ISlot[]> {
     const vehicleTypes = await this.vehicleTypeControl.search();
 
-    const vehicleType = vehicleTypes.filter(
-      (item) => item.id === vehicleTypeId
-    )[0];
+    const vehicleType = vehicleTypes.filter((item) => item.id === vehicleTypeId)[0];
 
-    const parkingSlot = parkingSlotFactory.getParkingSlotByVehicleType(
-      vehicleType.type,
-      parkingLotId
-    );
+    const parkingSlot = parkingSlotFactory.getParkingSlotByVehicleType(vehicleType.type, parkingLotId);
 
     return parkingSlot.defineSlotToPark(vehicleTypes);
   }
 
-  async setAvailablility(slotsIds: number[], status: SlotStatus): Promise<ISlot[]>{
-    return this.slotRepo.updateMany(slotsIds, {status})
+  async setAvailablility(slotsIds: number[], status: SlotStatus): Promise<ISlot[]> {
+    return this.slotRepo.updateMany(slotsIds, { status });
   }
 }
 
