@@ -1,5 +1,6 @@
 import express from 'express';
 
+import dashboardRouter from './dashboard';
 import parkingRouter from './parking';
 import parkingLotRouter from './parkingLot';
 import slotRouter from './slot';
@@ -8,6 +9,7 @@ import vehicleTypeRouter from './vehicleType';
 
 const router = express.Router();
 
+router.use('/dashboard', dashboardRouter);
 router.use('/parkings', parkingRouter);
 router.use('/parking-lots', parkingLotRouter);
 router.use('/slots', slotRouter);
