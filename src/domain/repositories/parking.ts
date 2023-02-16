@@ -1,11 +1,6 @@
 import { raw } from 'objection';
 import { IDashboardSummary } from '../models/interfaces/iDashboard';
-import {
-  ParkingInput,
-  IParking,
-  IParkingFilter,
-  ParkingCheckout,
-} from '../models/interfaces/iParking';
+import { ParkingInput, IParking, IParkingFilter, ParkingCheckout } from '../models/interfaces/iParking';
 import { Parking } from '../models/parking';
 import { Slot } from '../models/slot';
 import { VehicleType } from '../models/vehicleType';
@@ -20,20 +15,15 @@ class ParkingRepository implements IParkingRepository {
     return await Parking.query().insert(parking).returning('*');
   }
 
-  async update(
-    id: number,
-    parking: ParkingInput | ParkingCheckout
-  ): Promise<IParking[]> {
+  async update(id: number, parking: ParkingInput | ParkingCheckout): Promise<IParking[]> {
     return await Parking.query().update(parking).where({ id }).returning('*');
   }
 
   async fetch(filter?: IParkingFilter): Promise<IParking[]> {
-    const parkingBuilder = Parking.query();
+    const parkingBuilder = Parking.query().withGraphJoined('slot').withGraphJoined('vehicle');
 
     if (filter?.parkingLotId) {
-      parkingBuilder
-        .withGraphJoined('slot')
-        .where('slot.parking_lot_id', filter.parkingLotId);
+      parkingBuilder.where('slot.parking_lot_id', filter.parkingLotId);
     }
 
     if (filter?.id) {
