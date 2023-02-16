@@ -1,3 +1,5 @@
+import { raw } from 'objection';
+import { IDashboardSummary } from '../models/interfaces/iDashboard';
 import {
   ParkingInput,
   IParking,
@@ -5,6 +7,8 @@ import {
   ParkingCheckout,
 } from '../models/interfaces/iParking';
 import { Parking } from '../models/parking';
+import { Slot } from '../models/slot';
+import { VehicleType } from '../models/vehicleType';
 import { IParkingRepository } from './interfaces/iParkingRepository';
 
 class ParkingRepository implements IParkingRepository {
@@ -56,6 +60,43 @@ class ParkingRepository implements IParkingRepository {
       .whereNull('checkout_at');
 
     return this.fetch({ inUse: true, parkingLotId });
+  }
+
+  async getSummary(parkingLotId: number): Promise<IDashboardSummary> {
+    const summaryPromise = Slot.query()
+      .where('parking_lot_id', parkingLotId)
+      .select(
+        raw(`
+            sum(case when status = 'available' then 1 end) as remaining
+      `),
+      )
+      .first();
+
+    const vehicleSummaryPromise = VehicleType.query()
+      .where('parking_lot_id', parkingLotId)
+      .whereNull('parkings.checkout_at')
+      .select(
+        raw(`vehicle_types.type
+        , count(parkings.id) as parked
+      `),
+      )
+      .leftJoin('vehicles', 'vehicles.vehicle_type_id', 'vehicle_types.id')
+      .leftJoin('parkings', 'vehicles.id', 'parkings.vehicle_id')
+      .leftJoin('slots', 'parkings.slot_id', 'slots.id')
+      .groupBy(['vehicle_types.type']);
+
+    const [summary, vehicleSummary] = await Promise.all([summaryPromise, vehicleSummaryPromise]);
+
+    const vehicles: any = {};
+    vehicleSummary?.map((vehicle: any) => {
+      const { type, parked } = vehicle;
+      vehicles[type] = { parked };
+    });
+
+    return {
+      remaining: (summary as any).remaining,
+      ...vehicles,
+    };
   }
 }
 
