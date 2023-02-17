@@ -11,12 +11,6 @@ router.post(
     const plate = req.body.plate;
     const vehicleTypeId = parseInt(req.body.vehicleTypeId, 10);
 
-    if (isNaN(vehicleTypeId)) {
-      throw new BadRequestError(
-        'Vehicle id are mandatory and must be a valid value'
-      );
-    }
-
     return res
       .status(200)
       .json(await vehicleController.create({ plate, vehicleTypeId }));

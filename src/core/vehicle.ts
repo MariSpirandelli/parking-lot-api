@@ -1,3 +1,4 @@
+import { BadRequestError } from '../infrastructure/express/errors';
 import { IVehicleFilter, VehicleInput } from '../domain/models/interfaces/iVehicle';
 import { IVehicleRepository } from '../domain/repositories/interfaces/iVehicleRepository';
 import vehicleRepo from '../domain/repositories/vehicle';
@@ -11,10 +12,20 @@ class VehicleController implements IVehicleController {
   }
 
   async create(vehicleInput: VehicleInput) {
-    const vehicle = await this.vehicleRepo.fetch({ plate: vehicleInput.plate });
+    const { plate, vehicleTypeId } = vehicleInput;
+
+    if (!plate) {
+      throw new BadRequestError('Vehicle plate is mandatory');
+    }
+
+    const vehicle = await this.vehicleRepo.fetch({ plate });
 
     if (vehicle) {
       return vehicle;
+    }
+
+    if (!vehicleTypeId) {
+      throw new BadRequestError('Vehicle type is mandatory');
     }
 
     return this.vehicleRepo.persist(vehicleInput);
