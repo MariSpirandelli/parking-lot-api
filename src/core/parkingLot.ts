@@ -56,10 +56,14 @@ class ParkingLotController implements IParkingLotController {
     if (!slotsSetup || slotsSetup.every((setup) => !setup.quantity)) {
       throw new BadRequestError('You must create a few slots');
     }
+    if (slotsSetup.some((setup) => setup.quantity > 1000)) {
+      throw new BadRequestError('Maximum slots to be created at once is 1000');
+    }
 
     logger.info(`[setup] Setting up slots for parking lot ${id}`, slotsSetup);
 
     const parkingSlots: SlotInput[] = [];
+    // TODO: CREATE SLOTS BY BATCHES AND REMOVE LIMIT ABOVE
     slotsSetup.map((slotSetup) => {
       const { vehicleTypeId, quantity } = slotSetup;
       const slotsToAdd = new Array(quantity).fill(1);
