@@ -41,7 +41,7 @@ class SlotRepository implements ISlotRepository {
       slotBuilder.where('parking_lot_id', filter.parkingLotId);
     }
 
-    return slotBuilder.select().debug();
+    return slotBuilder.select();
   }
 
   async remove(id: number, parkingLotId: number): Promise<ISlot[]> {
