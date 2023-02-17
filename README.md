@@ -53,6 +53,17 @@ You have two options for seeding:
 
 # REST API
 
+### API Endpoints
+
+| HTTP Verbs | Endpoints | Action |
+| ---  | --- | --- |
+| PUT  | /api/parking-lots/:parkingLotId/setup` | Parking lot slots setup|
+| GET  | /api/parkings/:parkingLotId | Retrieve parking history  |
+| POST | /api/parkings/:parkingLotId | To park a vehicle |
+| PUT  | /api/parkings/:parkingLotId/remove/:vehicleId | To unpark a vehicle |
+| POST | /api/vehicles/ | To create a new vehicle |
+| GET  | /api/dashboard/:parkingLotId/slots/status | Te retrieve parking lot status - remaining slots and amount of each vehicle type parked |
+
 ## Set up parking lot slots
 
 ### Request
@@ -108,19 +119,19 @@ curl --location --request PUT 'http://localhost:3000/api/parking-lots/1/setup' \
 ]
 ```
 
-## Get available slots
+## Get list of parked vehicles
 
 ### Request
 
-`GET /api/slots/:parkingLot`
+`GET /api/parkings/:parkingLot`
 
 Example
 
 ```curl
-curl --location --request GET 'http://localhost:3000/api/slots/1' \
+curl --location --request GET 'http://localhost:3000/api/parkings/1' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "inUse": false
+    "inUse": true
 }'
 ```
 
@@ -129,40 +140,58 @@ curl --location --request GET 'http://localhost:3000/api/slots/1' \
 ```json
 [
     {
-        "id": 1,
-        "createdAt": "2023-02-14T23:55:33.130Z",
+        "id": 4,
+        "createdAt": "2023-02-15T14:21:25.694Z",
         "updatedAt": null,
-        "parkingLotId": 1,
-        "vehicleTypeId": 1,
-        "leftSlotId": null,
-        "rightSlotId": null,
-        "parking": [],
-        "vehicleType": {
+        "slotId": 1,
+        "vehicleId": 1,
+        "checkinAt": "2023-02-15T14:21:25.694Z",
+        "checkoutAt": null,
+        "slot": {
             "id": 1,
-            "createdAt": "2023-02-14T22:56:02.702Z",
+            "createdAt": "2023-02-15T12:38:07.342Z",
+            "updatedAt": "2023-02-15T14:21:25.696Z",
+            "parkingLotId": 1,
+            "vehicleTypeId": 1,
+            "status": "occupied",
+            "leftSlotId": null,
+            "rightSlotId": null
+        },
+        "vehicle": {
+            "id": 1,
+            "createdAt": "2023-02-15T12:52:52.928Z",
             "updatedAt": null,
-            "type": "motorcycle",
-            "order": 1
+            "vehicleTypeId": 1,
+            "plate": "MAR7777"
+        }
+    },
+    {
+        "id": 7,
+        "createdAt": "2023-02-15T14:43:15.471Z",
+        "updatedAt": null,
+        "slotId": 2,
+        "vehicleId": 1,
+        "checkinAt": "2023-02-15T14:43:15.471Z",
+        "checkoutAt": null,
+        "slot": {
+            "id": 2,
+            "createdAt": "2023-02-15T12:38:07.342Z",
+            "updatedAt": "2023-02-15T14:43:15.473Z",
+            "parkingLotId": 1,
+            "vehicleTypeId": 1,
+            "status": "occupied",
+            "leftSlotId": null,
+            "rightSlotId": null
+        },
+        "vehicle": {
+            "id": 1,
+            "createdAt": "2023-02-15T12:52:52.928Z",
+            "updatedAt": null,
+            "vehicleTypeId": 1,
+            "plate": "MAR7777"
         }
     },
     ...
-    {
-        "id": 10,
-        "createdAt": "2023-02-14T23:55:33.130Z",
-        "updatedAt": null,
-        "parkingLotId": 1,
-        "vehicleTypeId": 3,
-        "leftSlotId": null,
-        "rightSlotId": null,
-        "parking": [],
-        "vehicleType": {
-            "id": 3,
-            "createdAt": "2023-02-14T22:56:02.702Z",
-            "updatedAt": null,
-            "type": "van",
-            "order": 3
-        }
-    }
 ]
 
 ```
@@ -197,7 +226,7 @@ curl --location --request POST 'http://localhost:3000/api/vehicles/' \
 
 ```
 
-## Parking
+## Park a vehicle
 
 ### Request
 
@@ -231,7 +260,7 @@ curl --location --request POST 'http://localhost:3000/api/parkings/1' \
 
 ```
 
-## Remove vehicle from parking lot
+## Unpark vehicle
 
 ### Request
 
