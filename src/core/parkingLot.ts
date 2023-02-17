@@ -1,9 +1,6 @@
 import { SlotInput } from '../domain/models/interfaces/iSlot';
-import { NotFoundError } from '../infrastructure/express/errors';
-import {
-  IParkingLotSetup,
-  ParkingLotInput,
-} from '../domain/models/interfaces/iParkingLot';
+import { BadRequestError, NotFoundError } from '../infrastructure/express/errors';
+import { IParkingLotSetup, ParkingLotInput } from '../domain/models/interfaces/iParkingLot';
 import { IParkingLotRepository } from '../domain/repositories/interfaces/iParkingLotRepository';
 import parkingLotRepo from '../domain/repositories/parkingLot';
 import { ISlotController } from './interfaces/slot';
@@ -24,7 +21,7 @@ class ParkingLotController implements IParkingLotController {
   constructor(
     parkingLotRepo: IParkingLotRepository,
     slotControl: ISlotController,
-    vehicleTypeControl: IVehicleTypeController
+    vehicleTypeControl: IVehicleTypeController,
   ) {
     this.parkingLotRepo = parkingLotRepo;
     this.slotControl = slotControl;
@@ -56,6 +53,10 @@ class ParkingLotController implements IParkingLotController {
       throw new NotFoundError('Parking lot not found');
     }
 
+    if (!slotsSetup || slotsSetup.every((setup) => !setup.quantity)) {
+      throw new BadRequestError('You must create a few slots');
+    }
+
     logger.info(`[setup] Setting up slots for parking lot ${id}`, slotsSetup);
 
     const parkingSlots: SlotInput[] = [];
@@ -75,9 +76,5 @@ class ParkingLotController implements IParkingLotController {
   }
 }
 
-const parkingLotController = new ParkingLotController(
-  parkingLotRepo,
-  slotController,
-  vehicleTypeController
-);
+const parkingLotController = new ParkingLotController(parkingLotRepo, slotController, vehicleTypeController);
 export default parkingLotController;
