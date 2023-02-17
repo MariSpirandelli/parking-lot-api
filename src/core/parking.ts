@@ -1,5 +1,4 @@
-import { ISlot } from '../domain/models/interfaces/iSlot';
-import { NotFoundError } from '../infrastructure/express/errors/notFound';
+import { InternalError, NotFoundError } from '../infrastructure/express/errors';
 import {
   IParking,
   IParkingFilter,
@@ -67,7 +66,7 @@ class ParkingController implements IParkingController {
     return this.parkingRepo.update(id, parkingInput);
   }
 
-  async park(parking: ParkingCheckin): Promise<ISlot[]> {
+  async park(parking: ParkingCheckin): Promise<IParking[]> {
     const { parkingLotId, vehicleId } = parking;
 
     const parkingLot = await parkingLotController.search(parkingLotId);
@@ -90,7 +89,7 @@ class ParkingController implements IParkingController {
     );
 
     if (!availableSlots) {
-      throw new Error(
+      throw new InternalError(
         `Parking lot reached maximum limit for ${vehicle.type.type}`
       );
     }
@@ -105,9 +104,11 @@ class ParkingController implements IParkingController {
       };
     });
 
-    await this.parkingRepo.saveAll(parkingSpaces);
+    const parkings = await this.parkingRepo.saveAll(parkingSpaces);
 
-    return this.slotControl.setAvailablility(slotsIds, 'occupied');
+    await  this.slotControl.setAvailablility(slotsIds, 'occupied');
+
+    return parkings;
   }
 
   async remove(vehicleId: number, parkingLotId: number): Promise<IParking[]> {

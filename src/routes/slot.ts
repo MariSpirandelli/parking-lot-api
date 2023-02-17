@@ -9,13 +9,13 @@ router.get(
   '/:parkingLotId',
   asyncHandler(async (req: Request, res: Response) => {
     const parkingLotId = parseInt(req.params.parkingLotId, 10);
-    const filters = req.body;
+    const {...filters} = req.body;
 
     if (!parkingLotId) {
       throw new BadRequestError('Missing parking lot id');
     }
 
-    return res.status(200).json(await slotController.search(filters));
+    return res.status(200).json(await slotController.search({parkingLotId, ...filters}));
   })
 );
 

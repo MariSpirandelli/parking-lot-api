@@ -9,7 +9,7 @@ router.get(
   '/:parkingLotId',
   asyncHandler(async (req: Request, res: Response) => {
     const parkingLotId = parseInt(req.params.parkingLotId, 10);
-    const filters = req.body;
+    const {...filters} = req.query;
 
     if (!parkingLotId) {
       throw new BadRequestError('Missing parking lot id');
@@ -35,10 +35,10 @@ router.post(
         'Vehicle id are mandatory and must be valid value'
       );
     }
-
+    const parkedSlot = await parkingController.park({ vehicleId, parkingLotId });
     return res
       .status(200)
-      .json(await parkingController.park({ vehicleId, parkingLotId }));
+      .json(parkedSlot);
   })
 );
 
