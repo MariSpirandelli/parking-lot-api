@@ -1,4 +1,4 @@
-import { InternalError, NotFoundError } from '../infrastructure/express/errors';
+import { BadRequestError, InternalError, NotFoundError } from '../infrastructure/express/errors';
 import { IParking, IParkingFilter, ParkingCheckin, ParkingInput } from '../domain/models/interfaces/iParking';
 import { IParkingRepository } from '../domain/repositories/interfaces/iParkingRepository';
 import parkingRepo from '../domain/repositories/parking';
@@ -74,6 +74,12 @@ class ParkingController implements IParkingController {
 
     if (!vehicle) {
       throw new NotFoundError('Parking lot not found');
+    }
+
+    const isParked = await this.parkingRepo.fetch({ vehicleId, inUse: true });
+
+    if (isParked?.length) {
+      throw new BadRequestError('Vehicle already parked!');
     }
 
     let availableSlots = [];
