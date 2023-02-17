@@ -1,10 +1,5 @@
 import { InternalError, NotFoundError } from '../infrastructure/express/errors';
-import {
-  IParking,
-  IParkingFilter,
-  ParkingCheckin,
-  ParkingInput,
-} from '../domain/models/interfaces/iParking';
+import { IParking, IParkingFilter, ParkingCheckin, ParkingInput } from '../domain/models/interfaces/iParking';
 import { IParkingRepository } from '../domain/repositories/interfaces/iParkingRepository';
 import parkingRepo from '../domain/repositories/parking';
 import { IParkingController } from './interfaces/parking';
@@ -26,7 +21,7 @@ class ParkingController implements IParkingController {
     parkingRepo: IParkingRepository,
     slotControl: ISlotController,
     vehicleControl: IVehicleController,
-    parkingLotControl: IParkingLotController
+    parkingLotControl: IParkingLotController,
   ) {
     this.parkingRepo = parkingRepo;
     this.slotControl = slotControl;
@@ -83,15 +78,10 @@ class ParkingController implements IParkingController {
 
     let availableSlots = [];
 
-    availableSlots = await this.slotControl.getAvailable(
-      vehicle.vehicleTypeId,
-      parkingLotId
-    );
+    availableSlots = await this.slotControl.getAvailable(vehicle.vehicleTypeId, parkingLotId);
 
     if (!availableSlots) {
-      throw new InternalError(
-        `Parking lot reached maximum limit for ${vehicle.type.type}`
-      );
+      throw new InternalError(`Parking lot reached maximum limit for ${vehicle.type.type}`);
     }
 
     const slotsIds = [];
@@ -104,9 +94,10 @@ class ParkingController implements IParkingController {
       };
     });
 
-    const parkings = await this.parkingRepo.saveAll(parkingSpaces);
-
-    await  this.slotControl.setAvailablility(slotsIds, 'occupied');
+    const [parkings] = await Promise.all([
+      this.parkingRepo.saveAll(parkingSpaces),
+      this.slotControl.setAvailablility(slotsIds, 'occupied'),
+    ]);
 
     return parkings;
   }
@@ -128,10 +119,5 @@ class ParkingController implements IParkingController {
   }
 }
 
-const parkingController = new ParkingController(
-  parkingRepo,
-  slotController,
-  vehicleController,
-  parkingLotController
-);
+const parkingController = new ParkingController(parkingRepo, slotController, vehicleController, parkingLotController);
 export default parkingController;
