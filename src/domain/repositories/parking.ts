@@ -67,7 +67,7 @@ class ParkingRepository implements IParkingRepository {
       .whereNull('parkings.checkout_at')
       .select(
         raw(`vehicle_types.type
-        , count(parkings.id) as parked
+        , count(distinct(parkings.vehicle_id)) as parked
       `),
       )
       .leftJoin('vehicles', 'vehicles.vehicle_type_id', 'vehicle_types.id')
