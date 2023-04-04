@@ -200,7 +200,7 @@ curl --location --request GET 'http://localhost:3000/api/parkings/1' \
 
 ### Request
 
-`POST /api/vechicles/:parkingLot`
+`POST /api/vechicles/`
 
 Example
 
